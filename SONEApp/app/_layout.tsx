@@ -1,38 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-import React from "react";
-import { AuthProvider } from '../providers/AuthProvider';
+import React, { useEffect, useState } from 'react';
+import { Slot } from 'expo-router';
+import LoginPage from '@/components/LoginPage'; // (B) Our login component
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
+  // Wait for layout to mount, to avoid "navigate before mount" errors
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    setHasMounted(true);
+  }, []);
 
-  if (!loaded) {
+  // If layout isn't mounted yet, show nothing
+  if (!hasMounted) {
     return null;
   }
 
-  return (
-    <AuthProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="auth-screen" options={{ title: "Auth" }} />
-      </Stack>
-    </AuthProvider>
-  );
+  if (!isLoggedIn) {
+    // Show the login screen. Once user logs in, we'll set "isLoggedIn = true"
+    return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
+  }
+
+  // If logged in, show all other routes (including tabs)
+  return <Slot />;
 }

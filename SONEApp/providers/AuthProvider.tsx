@@ -1,6 +1,6 @@
 import React from 'react';
 import { Auth0Provider } from 'react-native-auth0';
-import { AUTH0_CONFIG } from '../config/auth0-config';
+import { AUTH0_CONFIG } from '@/config/auth0-config';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (

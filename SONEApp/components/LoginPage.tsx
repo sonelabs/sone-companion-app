@@ -1,15 +1,16 @@
+import { router } from "expo-router";
 import * as React from "react";
 import {Text, StyleSheet, View, Image, Pressable, TextInput} from "react-native";
 // import Rightbutton from "../assets/right-button.svg"
 // import Rightbutton1 from "../assets/right-button1.svg"
 // import Cursor from "../assets/cursor.svg"
 
-
-interface AuthProps {
-  onLogin?: () => Promise<void>;
-}
-
-const Auth: React.FC<AuthProps> = ({ onLogin }) => {
+interface LoginPageProps {
+	// The RootLayout passes an onLogin function, letting us set isLoggedIn to true
+	onLogin?: () => void;
+  }
+  
+  export default function LoginPage({ onLogin }: LoginPageProps) {
   // Add state for form fields
   const [name, setName] = React.useState('');
   const [uniqueId, setUniqueId] = React.useState('');
@@ -19,11 +20,15 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [uniqueIdFocused, setUniqueIdFocused] = React.useState(false);
   const [passwordFocused, setPasswordFocused] = React.useState(false);
   const [confirmPasswordFocused, setConfirmPasswordFocused] = React.useState(false);
-  
+
   const handleSubmit = async () => {
-    if (onLogin) {
-      await onLogin();
-    }
+    //  if (onLogin) {
+    //    await onLogin();
+	//    router.replace('/(tabs)/home'); // testing out route
+    // }
+	onLogin?.();         // Tells RootLayout we're "logged in" now
+    router.replace('/'); // Optionally jump directly to home 
+
   };
   
   return (
@@ -133,7 +138,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
           style={[styles.buttonPrimary, styles.fieldFlexBox]}
           onPress={handleSubmit}
         >
-          <Text style={[styles.button, styles.title4Typo]}>Continue</Text>
+          <Text style={[styles.button, styles.continuetext]}>Continue</Text>
         </Pressable>
       </View>
     </Pressable>
@@ -153,6 +158,12 @@ const styles = StyleSheet.create({
     		lineHeight: 20,
     		fontSize: 14
   	},
+	continuetext: {
+		color: "#fff",
+		fontSize: 12,
+		textAlign: "left"
+
+	},
   	title4Typo: {
     		fontSize: 12,
     		textAlign: "left"
@@ -332,4 +343,3 @@ const styles = StyleSheet.create({
   	},
 });
 
-export default Auth;
