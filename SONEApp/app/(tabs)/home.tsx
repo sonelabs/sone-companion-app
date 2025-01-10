@@ -1,19 +1,10 @@
-//import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View } from 'react-native';
+import HomeScreen from '../../components/Home-Screen';
 
-export default function HomeScreen() {
-  return (
-      <View style= {styles.container}>
-        <Text>Home Screen</Text>
-      </View>
-  );
+export default function PatientsScreen() {
+    return (
+        <View style={{ flex: 1 }}>
+            <HomeScreen />
+        </View>
+    );
 }
-  
-  const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-      },
-    });
