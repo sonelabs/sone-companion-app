@@ -1,9 +1,10 @@
 import { router } from "expo-router";
 import * as React from "react";
-import {Text, StyleSheet, View, Image, Pressable, TextInput} from "react-native";
+import {Text, StyleSheet, View, Image, Pressable, TextInput, TouchableOpacity} from "react-native";
 // import Rightbutton from "../assets/right-button.svg"
 // import Rightbutton1 from "../assets/right-button1.svg"
 // import Cursor from "../assets/cursor.svg"
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface LoginPageProps {
 	// The RootLayout passes an onLogin function, letting us set isLoggedIn to true
@@ -20,6 +21,8 @@ interface LoginPageProps {
   const [uniqueIdFocused, setUniqueIdFocused] = React.useState(false);
   const [passwordFocused, setPasswordFocused] = React.useState(false);
   const [confirmPasswordFocused, setConfirmPasswordFocused] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const handleSubmit = async () => {
     //  if (onLogin) {
@@ -95,7 +98,7 @@ interface LoginPageProps {
                       onChangeText={setPassword}
                       value={password}
                       placeholder="Create a password"
-                      secureTextEntry={true}
+                      secureTextEntry={!showPassword}
                       autoComplete="off"
                       autoCorrect={false}
                       onFocus={() => setPasswordFocused(true)}
@@ -103,7 +106,9 @@ interface LoginPageProps {
                     />
                   </View>
                 </View>
-                <Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                  <Entypo name={showPassword ? "eye-with-line" : "eye"} size={24} color="#c5c6cc" />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.textField3}>
@@ -119,7 +124,7 @@ interface LoginPageProps {
                       onChangeText={setConfirmPassword}
                       value={confirmPassword}
                       placeholder="Confirm password"
-                      secureTextEntry={true}
+                      secureTextEntry={!showConfirmPassword}
                       autoComplete="off"
                       autoCorrect={false}
                       onFocus={() => setConfirmPasswordFocused(true)}
@@ -127,7 +132,9 @@ interface LoginPageProps {
                     />
                   </View>
                 </View>
-                <Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" />
+                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  <Entypo name={showConfirmPassword ? "eye-with-line" : "eye"} size={24} color="#c5c6cc" />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -326,7 +333,7 @@ const styles = StyleSheet.create({
   	},
   	buttonPrimaryWrapper: {
     		right: 0,
-    		bottom: 0,
+    		bottom: 24,
     		left: 0,
     		padding: 24
   	},
