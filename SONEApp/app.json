@@ -9,22 +9,46 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+     "bundleIdentifier": "com.SONE.SONEApp",
+      "buildNumber": "1.0.0",
       "supportsTablet": true,
-      "bundleIdentifier": "your.bundle.identifier"
+      "entitlements": { 
+        "aps-environment": "development" 
+      },
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification", 
+          "fetch"
+        ],
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        },
+        "NSFaceIDUsageDescription": "This app uses Face ID for authentication.",
+        "NSCameraUsageDescription": "Used to scan documents securely within a HIPAA context.",
+        "NSMicrophoneUsageDescription": "Used for secure voice messaging.",
+        "NSPhotoLibraryUsageDescription": "Allows the user to upload photos securely.",
+        "NSLocationWhenInUseUsageDescription": "Location data is used for verifying facility locations"
+      }
     },
     "android": {
+      "package" : "com.SONE.SONEApp",
+      "versionCode" : 1,
+      "permissions": [
+       "READ_EXTERNAL_STORAGE",
+        "POST_NOTIFICATIONS"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "your.package.name"
+      }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
+    "plugins":  [
+      "expo-dev-client",
       "expo-router",
       [
         "expo-splash-screen",
