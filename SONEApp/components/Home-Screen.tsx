@@ -1,126 +1,127 @@
 import * as React from "react";
-import {StyleSheet, View, Image, Text, Pressable} from "react-native";
-
+import {StyleSheet, View, Text, Pressable} from "react-native";
 
 const Home = () => {
-  	
-  	return (
-    		<Pressable style={styles.home} onPress={()=>{}}>
-      			<Text style={styles.mostRecent}>Most Recent</Text>
-      			<View style={[styles.homeInner, styles.homeChildLayout]} />
-      			<Text style={[styles.patientInRoom, styles.patientTypo1]}>Patient in Room #164 needs to use the restroom.</Text>
-      			<Text style={[styles.now, styles.agoTypo]}>Now</Text>
-      			<View style={[styles.rectangleView, styles.homeChildLayout]} />
-      			<Text style={[styles.patientInRoom1, styles.patientTypo]}>Patient in Room #144 requested ice.</Text>
-      			<Text style={[styles.mAgo, styles.agoTypo]}>1m ago</Text>
-      			<View style={[styles.homeChild1, styles.homeChildLayout]} />
-      			<Text style={[styles.patientInRoom2, styles.patientTypo]}>Patient in Room #112 requested water.</Text>
-      			<Text style={[styles.mAgo1, styles.agoTypo]}>1m ago</Text>
-      			<View style={[styles.homeChild2, styles.homeChildLayout]} />
-      			<Text style={[styles.patientInRoom3, styles.patientTypo1]}>Patient in Room #144 would like the lights turned off.</Text>
-      			<Text style={[styles.mAgo2, styles.agoTypo]}>1m ago</Text>
-    		</Pressable>);
+  // Track hidden messages and last tap time
+  const [hiddenMessages, setHiddenMessages] = React.useState<{[key: string]: boolean}>({});
+  const lastTap = React.useRef<{[key: string]: number}>({});
+  
+  const handlePress = (messageId: string) => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300; // milliseconds
+    
+    if (lastTap.current[messageId] && (now - lastTap.current[messageId]) < DOUBLE_PRESS_DELAY) {
+      // Double tap detected - hide the message
+      setHiddenMessages(prev => ({ ...prev, [messageId]: !prev[messageId] }));
+      lastTap.current[messageId] = 0; // Reset last tap
+    } else {
+      // First tap
+      lastTap.current[messageId] = now;
+    }
+  };
+
+  // Message component
+  const Message = ({ id, style, children }: { id: string, style?: any, children: React.ReactNode }) => (
+    <Pressable
+      onPress={() => handlePress(id)}
+      style={({ pressed }) => [
+        style,
+        {
+          display: hiddenMessages[id] ? 'none' : 'flex',
+          backgroundColor: pressed ? '#e0e0e0' : '#fff',
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
+      ]}
+    >
+      {children}
+    </Pressable>
+  );
+
+  return (
+    <View style={styles.home}>
+      <Text style={styles.mostRecent}>Most Recent</Text>
+
+      <Message id="msg2" style={styles.homeChildLayout}>
+        <Text style={styles.patientTypo}>
+          Patient in Room #144 requested ice.
+        </Text>
+        <Text style={styles.agoTypo}>1m ago</Text>
+      </Message>
+
+      <Message id="msg3" style={styles.homeChildLayout}>
+        <Text style={styles.patientTypo}>
+          Patient in Room #112 requested water.
+        </Text>
+        <Text style={styles.agoTypo}>1m ago</Text>
+      </Message>
+
+      <Message id="msg4" style={styles.homeChildLayout}>
+        <Text style={styles.patientTypo1}>
+          Patient in Room #144 would like the lights turned off.
+        </Text>
+        <Text style={styles.agoTypo}>1m ago</Text>
+      </Message>
+	  
+	  <Message id="msg1" style={styles.homeChildLayout}>
+        <Text style={styles.patientTypo1}>
+          Patient in Room #164 needs to use the restroom.
+        </Text>
+        <Text style={styles.agoTypo}>Now</Text>
+      </Message>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  	homeChildLayout: {
-    		height: 68,
-    		width: 349,
-    		left: 22,
-    		backgroundColor: "#fff",
-    		borderRadius: 5,
-    		position: "absolute"
-  	},
-  	patientTypo1: {
-    		height: 31,
-    		width: 269,
-    		fontFamily: "Inter-Bold",
-    		fontWeight: "700",
-    		letterSpacing: 0.1,
-    		fontSize: 13,
-    		left: 45,
-    		textAlign: "left",
-    		color: "#000",
-    		position: "absolute"
-  	},
-  	agoTypo: {
-    		height: 11,
-    		width: 35,
-    		textAlign: "right",
-    		color: "#636363",
-    		fontFamily: "Inter-Regular",
-    		fontSize: 10,
-    		left: 324,
-    		letterSpacing: 0.1,
-    		position: "absolute"
-  	},
-  	patientTypo: {
-    		height: 17,
-    		width: 269,
-    		fontFamily: "Inter-Bold",
-    		fontWeight: "700",
-    		letterSpacing: 0.1,
-    		fontSize: 13,
-    		left: 45,
-    		textAlign: "left",
-    		color: "#000",
-    		position: "absolute"
-  	},
-  	mostRecent: {
-    		top: 106,
-    		fontSize: 20,
-    		letterSpacing: 0.2,
-    		fontWeight: "800",
-    		fontFamily: "Inter-ExtraBold",
-    		width: 349,
-    		textAlign: "left",
-    		color: "#000",
-    		left: 22,
-    		position: "absolute"
-  	},
-  	homeInner: {
-    		top: 158
-  	},
-  	patientInRoom: {
-    		top: 177
-  	},
-  	now: {
-    		top: 166
-  	},
-  	rectangleView: {
-    		top: 236
-  	},
-  	patientInRoom1: {
-    		top: 262
-  	},
-  	mAgo: {
-    		top: 244
-  	},
-  	homeChild1: {
-    		top: 314
-  	},
-  	patientInRoom2: {
-    		top: 340
-  	},
-  	mAgo1: {
-    		top: 322
-  	},
-  	homeChild2: {
-    		top: 392
-  	},
-  	patientInRoom3: {
-    		top: 411
-  	},
-  	mAgo2: {
-    		top: 400
-  	},
-  	home: {
-    		backgroundColor: "#f7f7f7",
-    		flex: 1,
-    		width: "100%",
-    		height: 852,
-    		overflow: "hidden"
-  	}
+  homeChildLayout: {
+    height: 68,
+    width: 349,
+    marginLeft: 22,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    marginBottom: 10,
+    padding: 15,
+    justifyContent: 'center',
+  },
+  patientTypo1: {
+    fontFamily: "Inter-Bold",
+    fontWeight: "700",
+    letterSpacing: 0.1,
+    fontSize: 13,
+    color: "#000",
+  },
+  agoTypo: {
+    textAlign: "right",
+    color: "#636363",
+    fontFamily: "Inter-Regular",
+    fontSize: 10,
+    letterSpacing: 0.1,
+    position: 'absolute',
+    right: 5,
+    top: 5,
+  },
+  patientTypo: {
+    fontFamily: "Inter-Bold",
+    fontWeight: "700",
+    letterSpacing: 0.1,
+    fontSize: 13,
+    color: "#000",
+  },
+  mostRecent: {
+    fontSize: 20,
+    letterSpacing: 0.2,
+    fontWeight: "800",
+    fontFamily: "Inter-ExtraBold",
+    color: "#000",
+    marginLeft: 22,
+    marginBottom: 20,
+  },
+  home: {
+    backgroundColor: "#f7f7f7",
+    flex: 1,
+    width: "100%",
+    paddingTop: 106,
+  }
 });
 
 export default Home;
