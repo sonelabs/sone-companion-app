@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Slot } from 'expo-router';
-import LoginPage from '@/components/LoginPage'; // (B) Our login component
+import { NavigationContainer } from '@react-navigation/native';
+import Login from '@/components/Login'; // (B) Our login component
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useState, useEffect } from 'react';
+import { User } from 'firebase/auth';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import Home from '@/app/(tabs)/home';
 
+const Stack = createNativeStackNavigator();
 export default function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  // Wait for layout to mount, to avoid "navigate before mount" errors
   useEffect(() => {
-    setHasMounted(true);
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      setUser(user);
+    });
   }, []);
 
-  // If layout isn't mounted yet, show nothing
-  if (!hasMounted) {
-    return null;
-  }
-
-  if (!isLoggedIn) {
-    // Show the login screen. Once user logs in, we'll set "isLoggedIn = true"
-    return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
-  }
-
-  // If logged in, show all other routes (including tabs)
-  return <Slot />;
+  return (
+    <Stack.Navigator>
+      {user ? (
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+      ) : (
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+      )}
+    </Stack.Navigator>
+  );
 }

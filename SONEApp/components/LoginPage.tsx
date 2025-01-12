@@ -6,6 +6,7 @@ import {Text, StyleSheet, View, Image, Pressable, TextInput, TouchableOpacity} f
 // import Cursor from "../assets/cursor.svg"
 import Entypo from '@expo/vector-icons/Entypo';
 
+
 interface LoginPageProps {
 	// The RootLayout passes an onLogin function, letting us set isLoggedIn to true
 	onLogin?: () => void;
