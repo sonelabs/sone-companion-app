@@ -5,18 +5,22 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 import { Text, TextInput } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from "expo-router";
-
-interface LoginProps {
-  onShowSignup: () => void;
+interface SignupProps {
+  onSignup: () => void;
 }
 
-export default function Login({ onShowSignup }: LoginProps) {
+export default function Signup({ onSignup }: SignupProps) {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [nameFocused, setNameFocused] = useState(false);
     const [emailFocused, setEmailFocused] = useState(false);
     const [passwordFocused, setPasswordFocused] = useState(false);
+    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
     
     const auth = FIREBASE_AUTH;
 
@@ -25,6 +29,7 @@ export default function Login({ onShowSignup }: LoginProps) {
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
             console.log(response);
+            onSignup();
         } catch (error: any) {
             console.log(error);
             alert('Sign in failed: ' + error.message);
@@ -33,14 +38,47 @@ export default function Login({ onShowSignup }: LoginProps) {
         }
     }
 
+    const signUp = async () => {
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+        setLoading(true);
+        try {
+            const response = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(response);
+            alert('Account created successfully');
+            onSignup();
+        } catch (error: any) {
+            console.log(error);
+            alert('Sign up failed: ' + error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <View style={styles.auth}>
             <View style={[styles.frameParent, styles.frameParentFlexBox]}>
-                <View style={styles.logInWrapper}>
-                    <Text style={styles.logIn}>Log in</Text>
+                <View style={styles.SignupWrapper}>
+                    <Text style={styles.Signup}>Sign Up</Text>
                 </View>
-                <View style={styles.loginOptions}>
+                <View style={styles.SignupOptions}>
                     <View style={styles.form}>
+                        <View style={styles.textField}>
+                            <Text style={[styles.title4, styles.title4Typo]}>Name</Text>
+                            <View style={[styles.fieldBorder, nameFocused && styles.fieldFocused]}>
+                                <TextInput
+                                    style={styles.placeholder}
+                                    onChangeText={setName}
+                                    value={name}
+                                    placeholder="First Last"
+                                    onFocus={() => setNameFocused(true)}
+                                    onBlur={() => setNameFocused(false)}
+                                    autoCorrect={false}
+                                />
+                            </View>
+                        </View>
                         <View style={styles.textField}>
                             <Text style={[styles.title4, styles.title4Typo]}>Email</Text>
                             <View style={[styles.fieldBorder, emailFocused && styles.fieldFocused]}>
@@ -63,7 +101,7 @@ export default function Login({ onShowSignup }: LoginProps) {
                                     style={styles.placeholder}
                                     onChangeText={setPassword}
                                     value={password}
-                                    placeholder="Enter password"
+                                    placeholder="Create a password"
                                     secureTextEntry={!showPassword}
                                     onFocus={() => setPasswordFocused(true)}
                                     onBlur={() => setPasswordFocused(false)}
@@ -75,6 +113,25 @@ export default function Login({ onShowSignup }: LoginProps) {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        <View style={styles.textField}>
+                            <Text style={[styles.title4, styles.title4Typo]}>Confirm Password</Text>
+                            <View style={[styles.field2, styles.fieldBorder, confirmPasswordFocused && styles.fieldFocused]}>
+                                <TextInput
+                                    style={styles.placeholder}
+                                    onChangeText={setConfirmPassword}
+                                    value={confirmPassword}
+                                    placeholder="Confirm password"
+                                    secureTextEntry={!showConfirmPassword}
+                                    onFocus={() => setConfirmPasswordFocused(true)}
+                                    onBlur={() => setConfirmPasswordFocused(false)}
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                />
+                                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                    <Entypo name={showConfirmPassword ? "eye-with-line" : "eye"} size={24} color="#c5c6cc" />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -83,11 +140,15 @@ export default function Login({ onShowSignup }: LoginProps) {
                     <ActivityIndicator size="large" color="#70eed9"/>
                 ) : (
                     <>
-                        <TouchableOpacity style={[styles.buttonPrimary, styles.fieldFlexBox]} onPress={signIn}>
-                            <Text style={styles.continuetext}>Login</Text>
+                        <TouchableOpacity 
+                            style={[styles.buttonPrimary, styles.fieldFlexBox]} 
+                            onPress={signUp}
+                            activeOpacity={0.7}
+                        >
+                            <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onShowSignup}>
-                            <Text style={styles.signupLink}>Don't have an account? Sign up</Text>
+                        <TouchableOpacity onPress={() => router.push("/")}>
+                            <Text style={styles.loginLink}>Already have an account? Log in</Text>
                         </TouchableOpacity>
                     </>
                 )}
@@ -135,7 +196,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         overflow: "hidden"
     },
-    logIn: {
+    Signup: {
         fontSize: 36,
         letterSpacing: 0.4,
         fontWeight: "800",
@@ -144,7 +205,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         alignSelf: "stretch"
     },
-    logInWrapper: {
+    SignupWrapper: {
         alignSelf: "stretch"
     },
     title4: {
@@ -172,7 +233,7 @@ const styles = StyleSheet.create({
     form: {
         gap: 16
     },
-    loginOptions: {
+    SignupOptions: {
         padding: 16,
         width: "100%"
     },
@@ -186,13 +247,16 @@ const styles = StyleSheet.create({
     buttonPrimary: {
         backgroundColor: "#70eed9",
         justifyContent: "center",
+        borderWidth: 1,
+        borderColor: "#70eed9",
         marginBottom: 12
     },
-    buttonSecondary: {
-        backgroundColor: "#ffffff",
-        borderColor: "#70eed9",
-        borderWidth: 1,
-        justifyContent: "center"
+    buttonText: {
+        color: "#ffffff",
+        fontSize: 16,
+        fontWeight: "600",
+        textAlign: "center",
+        width: "100%"
     },
     buttonPrimaryWrapper: {
         right: 0,
@@ -201,7 +265,7 @@ const styles = StyleSheet.create({
         padding: 24
     },
     continuetext: {
-        color: "#ffffff",
+        color: "#000",
         fontSize: 16,
         fontWeight: "600",
         textAlign: "center",
@@ -218,7 +282,7 @@ const styles = StyleSheet.create({
         borderColor: "#70EED9",
         borderWidth: 1.5,
     },
-    signupLink: {
+    loginLink: {
         color: "#000",
         fontSize: 14,
         fontWeight: "600",
