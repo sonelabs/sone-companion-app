@@ -5,6 +5,8 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 import { Text, TextInput } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from "expo-router";
+
+
 interface SignupProps {
   onSignup: () => void;
 }
@@ -147,7 +149,7 @@ export default function Signup({ onSignup }: SignupProps) {
                         >
                             <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => router.push("/")}>
+                        <TouchableOpacity onPress={onSignup}>
                             <Text style={styles.loginLink}>Already have an account? Log in</Text>
                         </TouchableOpacity>
                     </>

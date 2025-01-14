@@ -1,6 +1,7 @@
 import * as React from "react";
 import {StyleSheet, View, Image, Text} from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Signout from './Signout';
 // import avatar from '@/Avatar.png'; 
 
 
@@ -38,12 +39,7 @@ const Settings = () => {
           					</View>
           					<AntDesign name="right" size={10} color="#71727a" />
         				</View>
-        				<View style={styles.listItem}>
-          					<View style={styles.content}>
-            						<Text style={styles.title}>Sign out</Text>
-          					</View>
-          					<AntDesign name="right" size={10} color="#71727a" />
-        				</View>
+        				<Signout />
       			</View>
     		</View>);
 };
