@@ -9,15 +9,15 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-     "bundleIdentifier": "com.SONE.SONEApp",
+      "bundleIdentifier": "com.SONE.SONEApp",
       "buildNumber": "1.0.0",
       "supportsTablet": true,
-      "entitlements": { 
-        "aps-environment": "development" 
+      "entitlements": {
+        "aps-environment": "development"
       },
       "infoPlist": {
         "UIBackgroundModes": [
-          "remote-notification", 
+          "remote-notification",
           "fetch"
         ],
         "NSAppTransportSecurity": {
@@ -31,10 +31,10 @@
       }
     },
     "android": {
-      "package" : "com.SONE.SONEApp",
-      "versionCode" : 1,
+      "package": "com.SONE.SONEApp",
+      "versionCode": 1,
       "permissions": [
-       "READ_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
         "POST_NOTIFICATIONS"
       ],
       "adaptiveIcon": {
@@ -47,7 +47,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins":  [
+    "plugins": [
       "expo-dev-client",
       "expo-router",
       [
@@ -62,6 +62,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "22d1a0b4-bf0c-49c6-bde5-e34a9561227c"
+      }
     }
   }
 }
