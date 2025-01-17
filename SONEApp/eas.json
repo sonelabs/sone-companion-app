@@ -12,6 +12,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
+        "credentialsSource": "local",
+        "appleTeamId": "${APPLE_TEAM_ID}",
         "simulator": true
       }
     },

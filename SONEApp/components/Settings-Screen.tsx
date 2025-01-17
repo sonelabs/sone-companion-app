@@ -91,12 +91,11 @@ const styles = StyleSheet.create({
   	},
   	settings1: {
     		top: 280,
-    		left: 22,
-    		width: 349,
-    		paddingHorizontal: 0,
+    		width: "100%",
+    		paddingHorizontal: 22,
     		paddingVertical: 24,
     		gap: 8,
-    		position: "absolute"
+    		position: "relative",
   	},
   	avatarIcon: {
     		marginTop: -363,
@@ -120,11 +119,10 @@ const styles = StyleSheet.create({
     		fontFamily: "Inter-Regular"
   	},
   	name: {
-    		top: 180,
-    		left: 144,
-    		gap: 4,
+    		top: 220,
     		alignItems: "center",
-    		position: "absolute"
+    		position: "relative",
+			marginBottom: 10,
   	},
   	settings: {
     		backgroundColor: "#f7f7f7",
