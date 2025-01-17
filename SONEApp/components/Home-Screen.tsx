@@ -75,7 +75,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   homeChildLayout: {
     height: 68,
-    width: 349,
+    marginHorizontal: 22,
     marginLeft: 22,
     backgroundColor: "#fff",
     borderRadius: 5,
