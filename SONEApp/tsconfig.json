@@ -18,7 +18,7 @@
     "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ],
+, "config/auth0-config.ts.bak"  ],
   "exclude": [
     "node_modules",
     "dist"
