@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "googleServicesFile": "./GoogleService-Info.plist",
+      "googleServicesFile": "./ios/GoogleService-Info.plist",
       "bundleIdentifier": "com.SONE.SONEApp",
       "buildNumber": "1.0.0",
       "supportsTablet": true,
@@ -32,7 +32,7 @@
       }
     },
     "android": {
-      "googleServicesFile": "./android/app/GoogleService-Info.plist",
+      "googleServicesFile": "./android/app/google-services.json",
       "package": "com.SONE.SONEApp",
       "versionCode": 1,
       "permissions": [

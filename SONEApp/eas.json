@@ -13,17 +13,7 @@
       "distribution": "internal",
       "ios": {
         "credentialsSource": "local",
-        "simulator": true,
-        "teamId": "@TEAM_ID"
-      }
-    },
-    "ios-simulator": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "credentialsSource": "local",
-        "simulator": true,
-        "teamId": "@TEAM_ID"        
+        "simulator": true
       }
     },
     "preview": {
