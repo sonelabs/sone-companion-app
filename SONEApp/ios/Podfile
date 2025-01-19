@@ -40,9 +40,7 @@ target 'SONEApp' do
   # Enable frameworks if your Podfile.properties.json or env var requests them
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
-  
-  # If you get "GoogleUtilities needs modular headers" errors
-  pod 'GoogleUtilities', :modular_headers => true
+
 
   use_react_native!(
     :path => config[:reactNativePath],

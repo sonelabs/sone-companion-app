@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "googleServicesFile": "./ios/GoogleService-Info.plist",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.SONE.SONEApp",
       "buildNumber": "1.0.0",
       "supportsTablet": true,
@@ -32,7 +32,7 @@
       }
     },
     "android": {
-      "googleServicesFile": "./android/app/google-services.json",
+      "googleServicesFile": "./google-services.json",
       "package": "com.SONE.SONEApp",
       "versionCode": 1,
       "permissions": [
@@ -60,7 +60,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#70EED9"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

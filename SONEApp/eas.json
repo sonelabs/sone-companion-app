@@ -12,14 +12,6 @@
         "simulator": true
       }
     },
-    "development-simulator": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "credentialsSource": "local",
-        "simulator": true
-      }
-    },
     "preview": {
       "distribution": "internal"
     },
