@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917120070266",
+    "project_id": "sonenotifications",
+    "storage_bucket": "sonenotifications.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917120070266:android:8ca9cef03c520d210ac1c3",
+        "android_client_info": {
+          "package_name": "com.SONE.SONEApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4pzLmDaD026XDSXZiCwVF3I8FhYd3xz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

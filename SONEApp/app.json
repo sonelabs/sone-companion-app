@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "googleServicesFile": "./ios/GoogleService-Info.plist",
+      "googleServicesFile": "./ios/SONEApp/GoogleService-Info.plist",
       "bundleIdentifier": "com.SONE.SONEApp",
       "buildNumber": "1.0.0",
       "supportsTablet": true,
@@ -50,6 +50,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       "expo-dev-client",
       "expo-router",
       [
