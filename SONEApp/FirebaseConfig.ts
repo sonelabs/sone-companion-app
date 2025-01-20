@@ -10,8 +10,9 @@ import {
     FIREBASE_APP_ID,
     FIREBASE_MEASUREMENT_ID
 } from "@env";
+
 console.log('Firebase API Key:', FIREBASE_API_KEY);// just checking if we loading the api-keys!
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,
     authDomain: FIREBASE_AUTH_DOMAIN,
     projectId: FIREBASE_PROJECT_ID,
