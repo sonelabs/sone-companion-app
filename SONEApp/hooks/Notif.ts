@@ -4,7 +4,7 @@ import messaging from "@react-native-firebase/messaging";
 import { initializeApp } from "@react-native-firebase/app";
 
 // Firebase configuration extracted from GoogleService-Info.plist
-const firebaseConfig = {
+const firebaseMsgConfig = {
   apiKey: "AIzaSyClzSu_rP1tHZEIj8-jvmM-_XHOjYRx2xY", // <key>API_KEY</key>
   authDomain: "sonenotifications.firebaseapp.com", // Constructed from PROJECT_ID
   projectId: "sonenotifications", // <key>PROJECT_ID</key>
@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 // Initialize Firebase if not already initialized
 try {
-  initializeApp(firebaseConfig);
+  initializeApp(firebaseMsgConfig);
   console.log("Firebase app initialized successfully.");
 } catch (error) {
   if (!/already exists/u.test(error.message)) {
@@ -55,7 +55,6 @@ export const usePushNotifications = () => {
 
   const getToken = async () => {
     try {
-      initializeApp(firebaseConfig)
       const fcmToken = await messaging().getToken();
       console.log("FCM Token:", fcmToken);
       // Save this token to your backend if required
