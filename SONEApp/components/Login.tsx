@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, ActivityIndicator, KeyboardAvoidingView, TouchableOpacity } from "react-native";
-import { FIREBASE_AUTH } from "../FirebaseConfig";
+import { FIREBASE_AUTH } from "../authFirebaseConfig";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { Text, TextInput } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';

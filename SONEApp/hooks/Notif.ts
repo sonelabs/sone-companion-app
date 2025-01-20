@@ -1,21 +1,10 @@
 import { useEffect } from "react";
 import { Alert, PermissionsAndroid, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
-import { initializeApp } from "@react-native-firebase/app";
+import { FIREBASE_APP } from "@/msgFirebaseConfig";
 
-// Firebase configuration extracted from GoogleService-Info.plist
-const firebaseMsgConfig = {
-  apiKey: "AIzaSyClzSu_rP1tHZEIj8-jvmM-_XHOjYRx2xY", // <key>API_KEY</key>
-  authDomain: "sonenotifications.firebaseapp.com", // Constructed from PROJECT_ID
-  projectId: "sonenotifications", // <key>PROJECT_ID</key>
-  storageBucket: "sonenotifications.firebasestorage.app", // <key>STORAGE_BUCKET</key>
-  messagingSenderId: "917120070266", // <key>GCM_SENDER_ID</key>
-  appId: "1:917120070266:ios:aac6ef0b19212f130ac1c3", // <key>GOOGLE_APP_ID</key>
-};
-
-// Initialize Firebase if not already initialized
-try {
-  initializeApp(firebaseMsgConfig);
+try { // test to see if msg works
+  FIREBASE_APP
   console.log("Firebase app initialized successfully.");
 } catch (error) {
   if (!/already exists/u.test(error.message)) {
@@ -24,6 +13,7 @@ try {
 }
 
 export const usePushNotifications = () => {
+  FIREBASE_APP //start messaging!
   const requestPermission = async () => {
     if (Platform.OS === "android" && Platform.Version >= 33) {
       const hasPermission = await PermissionsAndroid.check(
