@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
+import { usePushNotifications } from '@/hooks/Notif';
 
 export default function Index() {
   const router = useRouter();
   const [hasMounted, setHasMounted] = useState(false);
+  usePushNotifications();
+  
 
   useEffect(() => {
     setHasMounted(true); // Mark component as mounted

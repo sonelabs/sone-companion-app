@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "googleServicesFile": "./ios/SONEApp/GoogleService-Info.plist",
       "bundleIdentifier": "com.SONE.SONEApp",
       "buildNumber": "1.0.0",
       "supportsTablet": true,
@@ -31,6 +32,7 @@
       }
     },
     "android": {
+      "googleServicesFile": "./android/app/google-services.json",
       "package": "com.SONE.SONEApp",
       "versionCode": 1,
       "permissions": [
@@ -48,6 +50,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       "expo-dev-client",
       "expo-router",
       [
