@@ -56,7 +56,7 @@ export const usePushNotifications = () => {
       }
 
       // Fetch FCM token for Android
-      const fcmToken = await await getExpoPushToken();
+      const fcmToken = await getExpoPushToken();
       console.log("FCM Token:", fcmToken);
 
       return fcmToken;
