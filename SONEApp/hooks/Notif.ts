@@ -43,15 +43,28 @@ export const usePushNotifications = () => {
     return isAuthorized;
   };
 
+ 
   const getToken = async () => {
     try {
-      const fcmToken = await messaging().getToken();
-      console.log("FCM Token:", fcmToken);
-      // Save this token to your backend if required
+      if (Platform.OS === "ios") {
+        const apnsToken = await messaging().getAPNSToken()
+        if (!apnsToken) {
+          console.warn("APNs token is null. Check APNs setup.")
+          return
+        }
+        console.log("APNs Token:", apnsToken)
+      }
+
+      const fcmToken = await messaging().getToken()
+      console.log("FCM Token:", fcmToken)
+
+     
+      return fcmToken
     } catch (error) {
-      console.error("Error fetching FCM token:", error);
+      console.error("Error fetching push notification token:", error)
     }
-  };
+  }
+
 
   const handleNotifications = () => {
     messaging().onMessage(async (remoteMessage) => {
