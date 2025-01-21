@@ -51,23 +51,40 @@ export const usePushNotifications = () => {
     FIREBASE_APP;
     try {
       if (Platform.OS === "ios") {
-        // Fetch APNs token for iOS
-       
-        const apnsToken = await messaging().getAPNSToken();
-        if (!apnsToken) {
-          console.warn("APNs token is null. Check APNs setup.");
-          return;
-        }
-        console.log("APNs Token:", apnsToken);
+        // Use Expo for iOS to get the token
+        return await getExpoPushToken();
       }
 
-      // Fetch FCM token
+      // Fetch FCM token for Android
       const fcmToken = await messaging().getToken();
       console.log("FCM Token:", fcmToken);
 
       return fcmToken;
     } catch (error) {
       console.error("Error fetching push notification token:", error);
+    }
+  };
+
+  const getExpoPushToken = async () => {
+    try {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        console.warn("Expo push notification permissions are not granted.");
+        return;
+      }
+
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log("Expo Push Token:", token);
+      return token;
+    } catch (error) {
+      console.error("Error fetching Expo push notification token:", error);
     }
   };
 
@@ -104,7 +121,8 @@ export const usePushNotifications = () => {
 
       const hasPermission = await requestPermission();
       if (hasPermission) {
-        await getToken();
+        const token = await getToken();
+        console.log("Push Notification Token:", token);
         handleNotifications();
       }
     })();
