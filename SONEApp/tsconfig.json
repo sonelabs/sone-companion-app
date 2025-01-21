@@ -5,8 +5,6 @@
     "checkJs": false, 
     "jsx":"react-native", 
     "strict": true,
-    "types": ["react-native"],
-    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@/*": [
         "./*"
@@ -19,8 +17,8 @@
     "**/*.js",
     "**/*.jsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "config/auth0-config.ts.bak"],
+    "expo-env.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist"

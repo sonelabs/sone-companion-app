@@ -8,6 +8,15 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "credentialsSource": "local",
+        "appleTeamId": "${APPLE_TEAM_ID}",
+        "simulator": true
+      }
+    },
     "preview": {
       "distribution": "internal"
     },

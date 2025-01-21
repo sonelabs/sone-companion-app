@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Slot, router } from 'expo-router';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { FIREBASE_AUTH } from '@/authFirebaseConfig';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import Login from '@/components/Login'; // Using new Login component
 import Signup from '@/components/Signup'; // Using new Signup component
 
