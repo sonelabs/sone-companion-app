@@ -1,73 +1,200 @@
-import * as React from "react";
-import {StyleSheet, View, Text, Pressable} from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 
-const Home = () => {
-  // Track hidden messages and last tap time
-  const [hiddenMessages, setHiddenMessages] = React.useState<{[key: string]: boolean}>({});
-  const lastTap = React.useRef<{[key: string]: number}>({});
-  
-  const handlePress = (messageId: string) => {
-    const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 300; // milliseconds
-    
-    if (lastTap.current[messageId] && (now - lastTap.current[messageId]) < DOUBLE_PRESS_DELAY) {
-      // Double tap detected - hide the message
-      setHiddenMessages(prev => ({ ...prev, [messageId]: !prev[messageId] }));
-      lastTap.current[messageId] = 0; // Reset last tap
-    } else {
-      // First tap
-      lastTap.current[messageId] = now;
+// Configure notifications for iOS
+async function registerForPushNotificationsAsync() {
+  if (Platform.OS === 'ios') {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
     }
+
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+  }
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  });
+}
+
+export default function Home() {
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      setNotifications(prev => [
+        ...prev,
+        {
+          id: notification.request.identifier,
+          ...notification.request.content,
+          receivedAt: Date.now(), // Store the timestamp
+        },
+      ]);
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  // Calculate time passed in a human-readable format
+  const getTimePassed = (receivedAt: number) => {
+    const now = Date.now();
+    const seconds = Math.floor((now - receivedAt) / 1000);
+
+    if (seconds < 60) return 'now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hr ago`;
+    return `${Math.floor(seconds / 86400)} day(s) ago`;
   };
 
-  // Message component
-  const Message = ({ id, style, children }: { id: string, style?: any, children: React.ReactNode }) => (
-    <Pressable
-      onPress={() => handlePress(id)}
-      style={({ pressed }) => [
-        style,
-        {
-          display: hiddenMessages[id] ? 'none' : 'flex',
-          backgroundColor: pressed ? '#e0e0e0' : '#fff',
-          transform: [{ scale: pressed ? 0.98 : 1 }],
-        },
-      ]}
-    >
-      {children}
-    </Pressable>
+  const renderNotification = ({ item }: { item: any }) => (
+    <View style={styles.notificationItem}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.body}>{item.body}</Text>
+      <Text style={styles.timePassed}>{getTimePassed(item.receivedAt)}</Text>
+    </View>
   );
 
   return (
     <View style={styles.home}>
       <Text style={styles.mostRecent}>Most Recent</Text>
+      <FlatList
+        data={notifications}
+        keyExtractor={item => item.id}
+        renderItem={renderNotification}
+      />
+    </View>
+  );
+}
 
-      <Message id="msg2" style={styles.homeChildLayout}>
-        <Text style={styles.patientTypo}>
-          Patient in Room #144 requested ice.
-        </Text>
-        <Text style={styles.agoTypo}>1m ago</Text>
-      </Message>
+const styles = StyleSheet.create({
+  home: {
+    backgroundColor: "#f7f7f7",
+    flex: 1,
+    width: "100%",
+    paddingTop: 106,
+  },
+  mostRecent: {
+    fontSize: 20,
+    letterSpacing: 0.2,
+    fontWeight: "800",
+    fontFamily: "Inter-ExtraBold",
+    color: "#000",
+    marginLeft: 22,
+    marginBottom: 20,
+  },
+  notificationItem: {
+    padding: 15,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    marginBottom: 10,
+    marginHorizontal: 22, // Add horizontal margin
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  body: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
+  },
+  timePassed: {
+    fontSize: 12,
+    color: '#999',
+    textAlign: 'right',
+  },
+});
 
-      <Message id="msg3" style={styles.homeChildLayout}>
-        <Text style={styles.patientTypo}>
-          Patient in Room #112 requested water.
-        </Text>
-        <Text style={styles.agoTypo}>1m ago</Text>
-      </Message>
+/*
 
-      <Message id="msg4" style={styles.homeChildLayout}>
-        <Text style={styles.patientTypo1}>
-          Patient in Room #144 would like the lights turned off.
-        </Text>
-        <Text style={styles.agoTypo}>1m ago</Text>
-      </Message>
-	  
-	  <Message id="msg1" style={styles.homeChildLayout}>
-        <Text style={styles.patientTypo1}>
-          Patient in Room #164 needs to use the restroom.
-        </Text>
-        <Text style={styles.agoTypo}>Now</Text>
-      </Message>
+export default Home;
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
+
+// Configure notifications for iOS
+async function registerForPushNotificationsAsync() {
+  if (Platform.OS === 'ios') {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+  }
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  });
+}
+
+export default function Home() {
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      setNotifications(prev => [
+        ...prev,
+        { id: notification.request.identifier, ...notification.request.content },
+      ]);
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const renderNotification = ({ item }: { item: any }) => (
+    <View style={styles.notificationItem}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.body}>{item.body}</Text>
+    </View>
+  );
+
+  return (
+    <View style={styles.home}>
+      <Text style={styles.mostRecent}>Most Recent</Text>
+      <FlatList
+        data={notifications}
+        keyExtractor={item => item.id}
+        renderItem={renderNotification}
+      />
     </View>
   );
 };
@@ -121,7 +248,37 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     paddingTop: 106,
-  }
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f7f7f7',
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  notificationItem: {
+    padding: 15,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  body: {
+    fontSize: 14,
+    color: '#666',
+  },
 });
 
 export default Home;
+*/
