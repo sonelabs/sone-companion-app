@@ -13,8 +13,6 @@ The app streamlines patient–caregiver interaction, making sure patient needs s
 
 1. **Patient Initiates Request**: Using the tablet app, patients select predefined options.
 
-2. **Push Notification Sent**: The request is transmitted through Firebase Cloud Messaging (FCM).
+2. **Caregiver Notification**: The Companion App receives the request as a push notification.
 
-3. **Caregiver Notification**: The Companion App receives the request as a push notification.
-
-4. **Action**: Staff can view, prioritize, and acknowledge the request directly within the app.
+3. **Action**: Staff can view, prioritize, and acknowledge the request directly within the app.
